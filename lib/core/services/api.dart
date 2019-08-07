@@ -1,5 +1,8 @@
 import 'dart:convert';
 
+import 'package:flutter_provider_template/core/models/ArticleModel.dart';
+import 'package:flutter_provider_template/core/models/WxArticleContentModel.dart';
+import 'package:flutter_provider_template/core/models/WxArticleTitleModel.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_provider_template/core/models/comment.dart';
 import 'package:flutter_provider_template/core/models/post.dart';
@@ -8,16 +11,26 @@ import 'package:flutter_provider_template/core/models/user.dart';
 /// The service responsible for networking requests
 class Api {
   static const endpoint = 'https://jsonplaceholder.typicode.com';
-  
+  static const String HOME_ARTICLE_LIST =
+      "http://www.wanandroid.com/article/list/";
+
+  // 公众号名称
+  static const String WX_LIST = "http://wanandroid.com/wxarticle/chapters/json";
+
+  // 公众号文章
+  static const String WX_ARTICLE_LIST = "http://wanandroid.com/wxarticle/list/";
+
   var client = new http.Client();
 
   static var _api;
-  static Api getInstance(){
-    if(_api==null){
-      _api=Api();
+
+  static Api getInstance() {
+    if (_api == null) {
+      _api = Api();
     }
     return _api;
   }
+
   Future<User> getUserProfile(int userId) async {
     // Get user profile for id
     var response = await client.get('$endpoint/users/$userId');
@@ -42,6 +55,15 @@ class Api {
     return posts;
   }
 
+  Future<ArticleModel> getArticle(int _page) async {
+    var response = await client.get('$HOME_ARTICLE_LIST$_page/json');
+    var parsed = response.body;
+    var parsed2 = parsed.toString();
+    var parsed3 = json.decode(parsed2);
+    var parsed4 = ArticleModel.fromJson(parsed3);
+    return parsed4;
+  }
+
   Future<List<Comment>> getCommentsForPost(int postId) async {
     var comments = List<Comment>();
 
@@ -50,12 +72,30 @@ class Api {
 
     // Parse into List
     var parsed = json.decode(response.body) as List<dynamic>;
-    
+
     // Loop and convert each item to a Comment
     for (var comment in parsed) {
       comments.add(Comment.fromJson(comment));
     }
 
     return comments;
+  }
+
+  Future<WxArticleTitleModel> getWxArticleTitle() async {
+    var response = await client.get(WX_LIST);
+    var parsed = response.body;
+    var parsed2 = parsed.toString();
+    var parsed3 = json.decode(parsed2);
+    var parsed4 = WxArticleTitleModel.fromJson(parsed3);
+    return parsed4;
+  }
+
+  Future<WxArticleContentModel> getWxArticleContent(int _id, int _page) async {
+    var response = await client.get(WX_ARTICLE_LIST + "$_id/$_page/json");
+    var parsed = response.body;
+    var parsed2 = parsed.toString();
+    var parsed3 = json.decode(parsed2);
+    var parsed4 = WxArticleContentModel.fromJson(parsed3);
+    return parsed4;
   }
 }

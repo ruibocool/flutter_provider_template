@@ -10,12 +10,13 @@ import '../../core/services/api.dart';
 
 class Comments extends StatelessWidget {
   final int postId;
+
   Comments(this.postId);
 
   @override
   Widget build(BuildContext context) {
     return BaseWidget<CommentsModel>(
-        model: CommentsModel(api:Api.getInstance()),
+        model: CommentsModel(api: Provider.of<Api>(context)),
         onModelReady: (model) => model.fetchComments(postId),
         builder: (context, model, child) => model.busy
             ? Center(
@@ -34,6 +35,7 @@ class Comments extends StatelessWidget {
 /// Renders a single comment given a comment model
 class CommentItem extends StatelessWidget {
   final Comment comment;
+
   const CommentItem(this.comment);
 
   @override

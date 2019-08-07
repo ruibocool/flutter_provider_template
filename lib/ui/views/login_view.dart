@@ -1,25 +1,20 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:flutter_provider_template/core/constants/app_contstants.dart';
+import 'package:flutter_provider_template/core/viewmodels/login_view_model.dart';
 import 'package:flutter_provider_template/ui/shared/app_colors.dart';
-import 'package:flutter_provider_template/ui/widgets/login_header.dart';
+import 'package:flutter_provider_template/ui/widgets/login_widget.dart';
+import 'package:provider/provider.dart';
 
-import 'package:flutter_provider_template/core/viewmodels/authentication_service.dart';
 import 'base_widget.dart';
 
-class LoginView extends StatefulWidget {
-  @override
-  _LoginViewState createState() => _LoginViewState();
-}
-
-class _LoginViewState extends State<LoginView> {
+class LoginView extends StatelessWidget with LoginWidget{
   final TextEditingController _controller = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
-    return BaseWidget<AuthenticationService>(
-      model: Provider.of<AuthenticationService>(context),
-      child: LoginHeader(controller: _controller),
+    return BaseWidget<LoginViewModel>(
+      model:  LoginViewModel(authenticationService: Provider.of(context)),
+      child: header(controller: _controller),
       builder: (context, model, child) => Scaffold(
           backgroundColor: backgroundColor,
           body: Column(
@@ -35,7 +30,7 @@ class _LoginViewState extends State<LoginView> {
                         style: TextStyle(color: Colors.black),
                       ),
                       onPressed: () async {
-                        var loginSuccess = await model.login(int.tryParse(_controller.text));
+                        var loginSuccess = await model.login(_controller.text);
                         if (loginSuccess) {
                           Navigator.pushNamed(context, RoutePaths.Home);
                         }

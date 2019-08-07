@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:common_utils/common_utils.dart';
 import 'package:flustars/flustars.dart';
+import 'package:flutter_provider_template/core/constants/app_contstants.dart';
 import 'package:flutter_provider_template/core/models/common_models.dart';
 
 class SpHelper {
@@ -50,5 +51,9 @@ class SpHelper {
         break;
     }
     return obj;
+  }
+
+  static String getThemeColor() {
+    return SpUtil.getString(Constant.key_theme_color, defValue: 'deepPurpleAccent');
   }
 }

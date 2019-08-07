@@ -148,7 +148,7 @@ class SplashPageState extends State<SplashPage> {
     _timerUtil.startCountDown();
   }
   void _goMain() {
-    Navigator.popAndPushNamed(context, RoutePaths.Login);
+    Navigator.popAndPushNamed(context, RoutePaths.Home);
   }
 
   Widget _buildSplashBg() {
@@ -221,6 +221,7 @@ class SplashPageState extends State<SplashPage> {
               margin: EdgeInsets.all(20.0),
               child: InkWell(
                 onTap: () {
+                  _timerUtil?.cancel();
                   _goMain();
                 },
                 child: new Container(

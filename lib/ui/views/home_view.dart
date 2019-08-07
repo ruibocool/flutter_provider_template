@@ -1,35 +1,105 @@
+import 'package:flustars/flustars.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:flutter_provider_template/core/models/user.dart';
-import 'package:flutter_provider_template/ui/shared/app_colors.dart';
-import 'package:flutter_provider_template/ui/shared/text_styles.dart';
-import 'package:flutter_provider_template/ui/shared/ui_helpers.dart';
-import 'package:flutter_provider_template/ui/widgets/posts.dart';
+import 'package:flutter_provider_template/ui/views/WxArticlePageUI.dart';
+import 'package:flutter_provider_template/ui/widgets/BottomNavigationBarDemo.dart';
+import 'package:flutter_provider_template/utils/strings.dart';
 
-class HomeView extends StatelessWidget {
+import 'DrawerWidgetUI.dart';
+import 'HomePageUI.dart';
+
+class HomeView extends StatefulWidget {
+  @override
+  State<StatefulWidget> createState() {
+    return HomeViewState();
+  }
+}
+
+class HomeViewState extends State<HomeView> {
+  var _pageList = [
+    HomePageUI(),
+    WxArticlePageUI(),
+    // NewsList(id: 408,),
+  ];
+  int _index = 0;
+  var _titleList = [
+    "首页",
+    "公众号",
+  ];
+
+  bool _showAppbar = true;
+  bool _showDrawer = true;
+
+  void _handleTabChanged(int newValue) {
+    setState(() {
+      _index = newValue;
+      if (_index == 0 || _index == 1) {
+        _showAppbar = true;
+      } else {
+        _showAppbar = false;
+      }
+
+      if (_index == 0) {
+        _showDrawer = true;
+      } else {
+        _showDrawer = false;
+      }
+    });
+  }
+
+  Widget _appBarWidget(BuildContext context) {
+    return AppBar(
+        title: Text(_titleList[_index]),
+        elevation: 0.4,
+        actions: _actionsWidget());
+  }
+
+  List<Widget> _actionsWidget() {
+    if (_showDrawer) {
+      return [new IconButton(icon: new Icon(Icons.search), onPressed: () {})];
+    } else {
+      return null;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: backgroundColor,
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          UIHelper.verticalSpaceLarge,
-          Padding(
-            padding: const EdgeInsets.only(left: 20.0),
-            child: Text(
-              'Welcome ${Provider.of<User>(context).getName()}',
-              style: headerStyle,
+    return WillPopScope(
+      onWillPop: _onWillPop,
+      child: DefaultTabController(
+          length: 2,
+          child: Scaffold(
+            appBar: _showAppbar ? _appBarWidget(context) : null,
+            drawer: _showDrawer ? DrawerDemo() : null,
+            body: IndexedStack(
+              index: _index,
+              children: _pageList,
             ),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(left: 20.0),
-            child: Text('Here are all your posts', style: subHeaderStyle),
-          ),
-          UIHelper.verticalSpaceSmall,
-          Expanded(child: Posts(),)
-        ],
-      ),
+            bottomNavigationBar: BottomNavigationBarDemo(
+              index: _index,
+              onChanged: _handleTabChanged,
+            ),
+          )),
     );
+  }
+
+  Future<bool> _onWillPop() {
+    return showDialog(
+          context: context,
+          builder: (context) => new AlertDialog(
+            title: new Text('提示'),
+            content: new Text('确定退出应用吗？'),
+            actions: <Widget>[
+              new FlatButton(
+                onPressed: () => Navigator.of(context).pop(false),
+                child: new Text('再看一会'),
+              ),
+              new FlatButton(
+                onPressed: () => Navigator.of(context).pop(true),
+                child: new Text('退出'),
+              ),
+            ],
+          ),
+        ) ??
+        false;
   }
 }

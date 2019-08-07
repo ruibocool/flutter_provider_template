@@ -1,26 +1,23 @@
+
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_provider_template/ui/shared/text_styles.dart';
 import 'package:flutter_provider_template/ui/shared/ui_helpers.dart';
 
-class LoginHeader extends StatelessWidget {
-  final TextEditingController controller;
-  final String validationMessage;
-
-  LoginHeader({@required this.controller, this.validationMessage});
-
-  @override
-  Widget build(BuildContext context) {
+class LoginWidget{
+  Widget header({@required controller, validationMessage}) {
     return Column(children: <Widget>[
       Text('Login', style: headerStyle),
       UIHelper.verticalSpaceMedium,
       Text('Enter a number between 1 - 10', style: subHeaderStyle),
       LoginTextField(controller),
-      this.validationMessage != null
+     validationMessage != null
           ? Text(validationMessage, style: TextStyle(color: Colors.red))
           : Container()
     ]);
   }
 }
+
 
 class LoginTextField extends StatelessWidget {
   final TextEditingController controller;

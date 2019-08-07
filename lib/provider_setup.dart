@@ -1,30 +1,53 @@
-import 'package:provider/provider.dart';
+import 'package:flutter_provider_template/core/models/ArticleModel.dart';
+import 'package:flutter_provider_template/core/models/post.dart';
 import 'package:flutter_provider_template/core/viewmodels/authentication_service.dart';
+import 'package:flutter_provider_template/core/viewmodels/posts_service.dart';
+import 'package:flutter_provider_template/ui/widgets/home_widget.dart';
+import 'package:provider/provider.dart';
 
 import 'core/models/user.dart';
 import 'core/services/api.dart';
+import 'core/viewmodels/home_service.dart';
 
 List<SingleChildCloneableWidget> providers = [
-  //...independentServices,
+  ...independentServices,
   ...dependentServices,
-  ...uiConsumableProviders
+  ...uiConsumableProviders,
+  ...homeIndexProvider
 ];
 
 List<SingleChildCloneableWidget> independentServices = [
-  Provider.value(value: Api())
+  Provider.value(value: Api()),
 ];
 
 List<SingleChildCloneableWidget> dependentServices = [
-  /*ProxyProvider<Api, AuthenticationService>(
+  ProxyProvider<Api, AuthenticationService>(
     builder: (context, api, authenticationService) =>
         AuthenticationService(api: api),
-  ),*/
-  ChangeNotifierProvider.value(value: AuthenticationService(api: Api.getInstance()))
+  ),
+  ProxyProvider<Api, PostsService>(
+    builder: (context, api, postService) =>
+        PostsService(api: api),
+  ),
+  ProxyProvider<Api, HomeService>(
+    builder: (context, api, homeService) =>
+        HomeService(api: api),
+  )
 ];
 
 List<SingleChildCloneableWidget> uiConsumableProviders = [
   StreamProvider<User>(
     builder: (context) => Provider.of<AuthenticationService>(context, listen: false).user,
     initialData: User(),
+  ),
+  StreamProvider<List<Post> >(
+    builder: (context) =>Provider.of<PostsService>(context, listen: false).poster,
+  ),
+  StreamProvider<List<Article>>(
+    builder: (context) =>Provider.of<HomeService>(context, listen: false).articleStream,
   )
+];
+
+List<SingleChildCloneableWidget> homeIndexProvider = [
+  ChangeNotifierProvider.value(value: HomePageIndex())
 ];
