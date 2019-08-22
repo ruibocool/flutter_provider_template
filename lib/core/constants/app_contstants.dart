@@ -7,6 +7,8 @@ class RoutePaths {
   static const String Home = '/home';
   static const String Post = '/post';
   static const String Splash = '/';
+  static const String Cart = '/cart';
+  static const String Catalog = '/catalog';
 }
 
 class Constant {

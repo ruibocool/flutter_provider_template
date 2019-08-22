@@ -6,6 +6,7 @@ import 'package:flutter_provider_template/utils/strings.dart';
 
 import 'DrawerWidgetUI.dart';
 import 'HomePageUI.dart';
+import 'catalog.dart';
 
 class HomeView extends StatefulWidget {
   @override
@@ -18,7 +19,7 @@ class HomeViewState extends State<HomeView> {
   var _pageList = [
     HomePageUI(),
     WxArticlePageUI(),
-    // NewsList(id: 408,),
+    MyCatalog(),
   ];
   int _index = 0;
   var _titleList = [
@@ -55,7 +56,9 @@ class HomeViewState extends State<HomeView> {
 
   List<Widget> _actionsWidget() {
     if (_showDrawer) {
-      return [new IconButton(icon: new Icon(Icons.search), onPressed: () {})];
+      return [new IconButton(icon: new Icon(Icons.shopping_cart), onPressed: () {
+        Navigator.pushNamed(context, '/cart');
+      })];
     } else {
       return null;
     }

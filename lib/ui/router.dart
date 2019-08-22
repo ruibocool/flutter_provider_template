@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_provider_template/core/constants/app_contstants.dart';
 import 'package:flutter_provider_template/core/models/post.dart';
+import 'package:flutter_provider_template/ui/views/cart.dart';
+import 'package:flutter_provider_template/ui/views/catalog.dart';
 import 'package:flutter_provider_template/ui/views/home_view.dart';
 import 'package:flutter_provider_template/ui/views/login_view.dart';
 import 'package:flutter_provider_template/ui/views/post_view.dart';
@@ -16,6 +18,10 @@ class Router {
         return MaterialPageRoute(builder: (_) => LoginView());
       case RoutePaths.Splash:
         return MaterialPageRoute(builder: (_) => SplashPage());
+      case RoutePaths.Cart:
+        return MaterialPageRoute(builder: (_) => MyCart());
+      case RoutePaths.Catalog:
+        return MaterialPageRoute(builder: (_) => MyCatalog());
       case RoutePaths.Post:
         var post = settings.arguments as Post;
         return MaterialPageRoute(builder: (_) => PostView(post: post));

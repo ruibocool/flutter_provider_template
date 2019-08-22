@@ -40,6 +40,10 @@ class _BottomNavigationBarDemoState extends State<BottomNavigationBarDemo>  with
           icon: Icon(Icons.book),
           title: Text('公众号'),
         ),
+        BottomNavigationBarItem(
+          icon: Icon(Icons.category),
+          title: Text('目录'),
+        ),
       ],
     );
   }

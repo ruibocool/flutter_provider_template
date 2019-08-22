@@ -5,6 +5,8 @@ import 'package:flutter_provider_template/core/viewmodels/posts_service.dart';
 import 'package:flutter_provider_template/ui/widgets/home_widget.dart';
 import 'package:provider/provider.dart';
 
+import 'core/models/cart.dart';
+import 'core/models/catalog.dart';
 import 'core/models/user.dart';
 import 'core/services/api.dart';
 import 'core/viewmodels/home_service.dart';
@@ -18,6 +20,13 @@ List<SingleChildCloneableWidget> providers = [
 
 List<SingleChildCloneableWidget> independentServices = [
   Provider.value(value: Api()),
+  Provider(builder: (context) => CatalogModel()),
+  // CartModel is implemented as a ChangeNotifier, which calls for the use
+  // of ChangeNotifierProvider. Moreover, CartModel depends
+  // on CatalogModel, so a ProxyProvider is needed.
+  ChangeNotifierProxyProvider<CatalogModel, CartModel>(
+      builder: (context, catalog, previousCart) =>
+          CartModel(catalog, previousCart)),
 ];
 
 List<SingleChildCloneableWidget> dependentServices = [
